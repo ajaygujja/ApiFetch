@@ -37,7 +37,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
         holder.loginName.setText(repo.getLogin());
         holder.type.setText(repo.getType());
-        Glide.with(context).load(repo.getAvatar()).into(holder.avatarImageView);
+        Glide.with(context).load(repo.getAvatar_url()).circleCrop().into(holder.avatarImageView);
     }
 
     @Override

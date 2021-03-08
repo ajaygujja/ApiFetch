@@ -6,13 +6,11 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 public class DatabaseClient {
-    private Context mContext;
     private static DatabaseClient databaseClient;
 
-    private AppDatabase appDatabase;
+    private final AppDatabase appDatabase;
 
-    public DatabaseClient(Context mContext){
-        this.mContext = mContext;
+    private DatabaseClient(Context mContext){
 
         appDatabase = Room.databaseBuilder(mContext,AppDatabase.class,"alldata").build();
     }
@@ -20,7 +18,6 @@ public class DatabaseClient {
     public static synchronized DatabaseClient getInstance(Context mContext){
         if (databaseClient == null){
             databaseClient = new DatabaseClient(mContext);
-
         }
         return databaseClient;
     }

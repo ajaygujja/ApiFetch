@@ -8,7 +8,7 @@ import androidx.room.Query;
 
 @Dao
 public interface API_Dao {
-    @Query("SELECT * FROM task")
+    @Query("SELECT * FROM API_Data")
     List<API_Data> getAll();
 
     @Insert

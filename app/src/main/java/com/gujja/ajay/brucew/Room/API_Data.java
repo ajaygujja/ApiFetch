@@ -17,8 +17,8 @@ public class API_Data implements Serializable {
     @ColumnInfo(name = "type___")
     String type___;
 
-    @ColumnInfo(name = "avatar_")
-    String avatar_;
+    @ColumnInfo(name = "avatar_url")
+    String avatar_url;
 
     public int getId() {
         return id;
@@ -44,14 +44,11 @@ public class API_Data implements Serializable {
         this.type___ = type___;
     }
 
-    public String getAvatar_() {
-        return avatar_;
+    public String getAvatar_url() {
+        return avatar_url;
     }
 
-    public void setAvatar_(String avatar_) {
-        this.avatar_ = avatar_;
+    public void setAvatar_url(String avatar_url) {
+        this.avatar_url = avatar_url;
     }
-
-
-
 }
