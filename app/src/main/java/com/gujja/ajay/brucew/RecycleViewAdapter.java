@@ -15,29 +15,25 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder>  {
+public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
     private Context context;
     private List<Repo> arrayList;
-    private OnItemClickListener  clickListener;
+    private OnItemClickListener clickListener;
 
-    public RecycleViewAdapter( Context context, List<Repo> arrayList) {
+    public RecycleViewAdapter(Context context, List<Repo> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener){
+    public void setOnItemClickListener(OnItemClickListener listener) {
         clickListener = listener;
     }
 
     @NonNull
     @Override
     public RecycleViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list,parent,false);
-        return new ViewHolder(view,clickListener);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list, parent, false);
+        return new ViewHolder(view, clickListener);
     }
 
     @Override
@@ -54,11 +50,15 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         return arrayList.size();
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView loginName, type ;
+        public TextView loginName, type;
         public ImageView avatarImageView;
 
-        public ViewHolder(@NonNull View itemView,final OnItemClickListener listener) {
+        public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             loginName = itemView.findViewById(R.id.login_name);
             type = itemView.findViewById(R.id.type_);

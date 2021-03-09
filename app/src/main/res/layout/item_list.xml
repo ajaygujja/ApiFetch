@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="10dp"
     android:background="@android:color/white"
     android:clickable="true"
     android:focusable="true"
-    android:layout_margin="10dp"
     android:orientation="horizontal">
 
 
@@ -14,9 +13,9 @@
         android:id="@+id/image_view"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:src="@drawable/jokcircle"
+        android:layout_gravity="center"
         android:scaleType="centerCrop"
-        android:layout_gravity="center"/>
+        android:src="@drawable/jokcircle" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,25 +27,25 @@
             android:id="@+id/login_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login_name"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:textStyle="bold"
-            android:layout_marginStart="10dp"
             android:layout_gravity="center_vertical"
-            android:textSize="28sp"/>
+            android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:gravity="center"
+            android:text="Login_name"
+            android:textColor="@color/black"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/type_"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Type"
-            android:gravity="center"
-            android:fontFamily="sans-serif-condensed-light"
-            android:layout_marginStart="10dp"
             android:layout_gravity="center_vertical"
-            android:textSize="18sp"/>
+            android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif-condensed-light"
+            android:gravity="center"
+            android:text="Type"
+            android:textSize="18sp" />
     </LinearLayout>
 
 
