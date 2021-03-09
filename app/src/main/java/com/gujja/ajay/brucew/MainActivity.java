@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
             List<API_Data> api_dataList = DatabaseClient.getInstance(MainActivity.this).getAppDatabase().api_dao().getAll();
             arrayList.clear();
             Log.i("nhush", "fetchfromRoom: "+ api_dataList);
+
             for (int i = 0; i < api_dataList.size(); i++) {
                 API_Data val = api_dataList.get(i);
                 Repo repo = new Repo(val.getId(), val.getLoginName_(), val.getAvatar_url(), val.getType___());
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
     private void fetchfromServer() {
         progressBar.setVisibility(View.VISIBLE);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(URL, response -> {
-            if (response == null) {
+            if (response == null  ) {
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), "Couldn't fetch the menu! Pleas try again.", Toast.LENGTH_LONG).show();
                 return;
@@ -200,4 +201,6 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
         Log.i("BRUCE", "onItemClick: " + repo.getId() + repo.getLogin());
         startActivity(detailIntent);
     }
+
+
 }
