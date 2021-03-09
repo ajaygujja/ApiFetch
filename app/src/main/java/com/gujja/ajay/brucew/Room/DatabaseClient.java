@@ -7,12 +7,14 @@ import androidx.room.RoomDatabase;
 
 public class DatabaseClient {
     private static DatabaseClient databaseClient;
-
-    private final AppDatabase appDatabase;
+    private Context mContext;
+    private AppDatabase appDatabase;
 
     private DatabaseClient(Context mContext){
-
-        appDatabase = Room.databaseBuilder(mContext,AppDatabase.class,"alldata").build();
+        this.mContext = mContext;
+        appDatabase = Room.databaseBuilder(mContext,AppDatabase.class,"alldata")
+                .fallbackToDestructiveMigration()
+                .build();
     }
 
     public static synchronized DatabaseClient getInstance(Context mContext){

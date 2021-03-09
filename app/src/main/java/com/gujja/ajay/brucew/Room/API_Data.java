@@ -9,6 +9,8 @@ import androidx.room.PrimaryKey;
 @Entity
 public class API_Data implements Serializable {
     @PrimaryKey(autoGenerate = true)
+
+    @ColumnInfo(name = "id")
     int id;
 
     @ColumnInfo(name = "t_loginName")

@@ -24,6 +24,8 @@ import com.gujja.ajay.brucew.Room.DatabaseClient;
 import com.gujja.ajay.brucew.model.Repo;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Repo> arrayList;
     private RecycleViewAdapter adapter;
     private ProgressBar progressBar;
-    private Context mCtx;
+
 
 
     @Override
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-        if (activeNetwork != null ) {
+        if (activeNetwork != null && arrayList != null) {
             fetchfromServer();
         } else {
             fetchfromRoom();
@@ -72,59 +74,67 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchfromRoom() {
-
-        Thread thread = new Thread(new Runnable(){
-
-            @Override
-            public void run() {
-                List<API_Data> api_data = DatabaseClient.getInstance(MainActivity.this).getAppDatabase().api_dao().getAll();
-                arrayList.clear();
-                for (API_Data val: api_data){
-                    Repo repo = new Repo(val.getId(),val.getLoginName_(),val.getAvatar_url(),val.getType___());
-                    arrayList.add(repo);
-                }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
+        Log.i("ajajaja", "fetchfromRoom: started");
+        Thread thread = new Thread(() -> {
+            List<API_Data> api_dataList = DatabaseClient.getInstance(MainActivity.this).getAppDatabase().api_dao().getAll();
+            arrayList.clear();
+            Log.i("nhush", "fetchfromRoom: "+ api_dataList);
+            for (API_Data val: api_dataList){
+                Repo repo = new Repo(val.getId(),val.getLoginName_(),val.getAvatar_url(),val.getType___());
+                arrayList.add(repo);
             }
+                runOnUiThread(() -> adapter.notifyDataSetChanged());
         });
         thread.start();
     }
 
     private void fetchfromServer() {
         progressBar.setVisibility(View.VISIBLE);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(URL, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                if (response == null) {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(), "Couldn't fetch the menu! Pleas try again.", Toast.LENGTH_LONG).show();
-                    return;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(URL, response -> {
+            if (response == null) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(), "Couldn't fetch the menu! Pleas try again.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+/*            try {
+                JSONArray jsonArray = new JSONArray(response);
+                Log.i("ajayajajja", "fetchfromServer: "+ jsonArray);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject data = jsonArray.getJSONObject(i);
+                    Log.i("ajayajajja", "fetchfromServer: "+ data);
+                    API_Data api_data = new API_Data();
+                    api_data.setLoginName_(data.getString("login"));
+                    api_data.setAvatar_url(data.getString("avatar_url"));
+                    api_data.setType___(data.getString("type"));
+                    api_data.setId(data.getInt("id"));
+
+                    DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().api_dao().insert(api_data);
+
+
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }*/
 
-                repoList = new Gson().fromJson(response.toString(), new TypeToken<List<Repo>>() {
-                }.getType());
-                Log.i("TAG", "onResponse: " + response.toString());
-                arrayList.clear();
-                arrayList.addAll(repoList);
 
-                adapter.notifyDataSetChanged();
+            repoList = new Gson().fromJson(response.toString(), new TypeToken<List<Repo>>() {
+            }.getType());
+            Log.i("TAG", "onResponse: " + response.toString());
+            arrayList.clear();
+            arrayList.addAll(repoList);
 
-                progressBar.setVisibility(View.GONE);
 
-                saveTask();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressBar.setVisibility(View.GONE);
-                Log.e("TAG", "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+            adapter.notifyDataSetChanged();
 
+            progressBar.setVisibility(View.GONE);
+
+            saveTask();
+        }, error -> {
+            progressBar.setVisibility(View.GONE);
+            Log.e("TAG", "Error: " + error.getMessage());
+            Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
         }
         );
 
@@ -134,33 +144,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveTask() {
-        class SaveTask extends AsyncTask<Void,Void,Void>{
 
-            @Override
-            protected Void doInBackground(Void... voids) {
+/*        for (int i = 0; i <= repoList.size(); i++){
+            API_Data api_data = new API_Data();
+            api_data.setLoginName_(repoList.get(i).getLogin());
+            api_data.setAvatar_url(repoList.get(i).getAvatar_url());
+            Log.i("ajay", "doInBackground: " + repoList.get(i).getAvatar_url());
+            api_data.setType___(repoList.get(i).getType());
+            api_data.setId(repoList.get(i).getId());
 
-                for (int i = 0; i <= repoList.size(); i++){
-                    API_Data api_data = new API_Data();
-                    api_data.setLoginName_(repoList.get(i).getLogin());
-                    api_data.setAvatar_url(repoList.get(i).getAvatar_url());
-                    Log.i("ajay", "doInBackground: " + repoList.get(i).getAvatar_url());
-                    api_data.setType___(repoList.get(i).getType());
-                    api_data.setId(repoList.get(i).getId());
+            DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().api_dao().insert(api_data);
 
-                    DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().api_dao().insert(api_data);
+        }*/
+         class SaveTask extends AsyncTask<Void,Void,Void> {
 
-                }
-                return null;
-            }
+             @Override
+             protected Void doInBackground(Void... voids) {
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
-                SaveTask st = new SaveTask();
-                st.execute();
+                 for (int i = 0; i < repoList.size(); i++) {
+                     API_Data api_data = new API_Data();
+                     api_data.setLoginName_(repoList.get(i).getLogin());
+                     api_data.setAvatar_url(repoList.get(i).getAvatar_url());
+                     Log.i("ajay", "doInBackground: " + repoList.get(i).getAvatar_url());
+                     api_data.setType___(repoList.get(i).getType());
+//                     api_data.setId(repoList.get(i).getId());
 
-            }
-        }
+                     DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().api_dao().insert(api_data);
+                 }
+                 return null;
+             }
+
+             @Override
+             protected void onPostExecute(Void aVoid) {
+                 super.onPostExecute(aVoid);
+                 Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
+             }
+         }
+
+        SaveTask st = new SaveTask();
+        st.execute();
+
+
     }
 }
