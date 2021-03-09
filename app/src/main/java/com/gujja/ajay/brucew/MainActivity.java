@@ -2,6 +2,7 @@ package com.gujja.ajay.brucew;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -28,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,7 +37,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecycleViewAdapter.OnItemClickListener {
 
     private static String URL = "https://api.github.com/users";
     List<Repo> repoList;
@@ -61,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setAdapter(adapter);
 
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(MainActivity.this);
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
@@ -79,8 +82,9 @@ public class MainActivity extends AppCompatActivity {
             List<API_Data> api_dataList = DatabaseClient.getInstance(MainActivity.this).getAppDatabase().api_dao().getAll();
             arrayList.clear();
             Log.i("nhush", "fetchfromRoom: "+ api_dataList);
-            for (API_Data val: api_dataList){
-                Repo repo = new Repo(val.getId(),val.getLoginName_(),val.getAvatar_url(),val.getType___());
+            for (int i = 0; i < api_dataList.size(); i++) {
+                API_Data val = api_dataList.get(i);
+                Repo repo = new Repo(val.getId(), val.getLoginName_(), val.getAvatar_url(), val.getType___());
                 arrayList.add(repo);
             }
                 runOnUiThread(() -> adapter.notifyDataSetChanged());
@@ -185,5 +189,15 @@ public class MainActivity extends AppCompatActivity {
         st.execute();
 
 
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent detailIntent = new Intent(this, DetailActivity.class);
+        Repo repo = arrayList.get(position);
+        detailIntent.putExtra("name",repo.getLogin());
+        detailIntent.putExtra("profile",repo.getAvatar_url());
+        Log.i("BRUCE", "onItemClick: " + repo.getId() + repo.getLogin());
+        startActivity(detailIntent);
     }
 }
