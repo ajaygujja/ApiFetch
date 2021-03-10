@@ -1,4 +1,4 @@
-package com.gujja.ajay.brucew;
+package com.gujja.ajay.brucew.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.gujja.ajay.brucew.R;
 import com.gujja.ajay.brucew.model.Repo;
 
 import java.util.List;
@@ -16,8 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
-    private Context context;
-    private List<Repo> arrayList;
+    private final Context context;
+    private final List<Repo> arrayList;
     private OnItemClickListener clickListener;
 
     public RecycleViewAdapter(Context context, List<Repo> arrayList) {
