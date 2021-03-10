@@ -19,7 +19,5 @@ public interface API_Dao {
     @Delete
     void deleteword(API_Data api_data);
 
-    @Update
-    void update(API_Data api_data );
 
 }

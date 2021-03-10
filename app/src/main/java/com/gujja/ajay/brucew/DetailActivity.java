@@ -21,25 +21,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private ImageView avatarImg;
-    private TextView profile_name;
-    private Button btn;
-    private ArrayList<Repo> arrayList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        avatarImg = findViewById(R.id.avatar_img);
-        profile_name = findViewById(R.id.profile_name);
-        btn = findViewById(R.id.delete_btn);
+
+        ImageView avatarImg = findViewById(R.id.avatar_img);
+        TextView profile_name = findViewById(R.id.profile_name);
+        Button btn = findViewById(R.id.delete_btn);
 
         Intent intent = getIntent();
         String name_ = intent.getStringExtra("name");
         String avatar_url = intent.getStringExtra("profile");
         Glide.with(DetailActivity.this).load(avatar_url).into(avatarImg);
-        profile_name.setText(name_);
 
+        profile_name.setText(name_);
 
         btn.setOnClickListener(view -> {
             Log.i("name of item", "onClick: " + name_ + "____" + avatar_url);
@@ -52,7 +48,6 @@ public class DetailActivity extends AppCompatActivity {
                     Log.i("Api data", "onClick: " + api_dataList);
 
                     for (int i = 0; i < api_dataList.size(); i++) {
-
                         API_Data val = api_dataList.get(i);
                         Log.i("APi ", "run: " + val);
 
@@ -80,12 +75,9 @@ public class DetailActivity extends AppCompatActivity {
                             break;
                         }
                     }
-
                 }
             });
             thread.start();
-
         });
-
     }
 }

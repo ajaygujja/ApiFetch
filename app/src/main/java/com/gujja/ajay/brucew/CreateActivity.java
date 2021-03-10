@@ -49,7 +49,7 @@ public class CreateActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getApplicationContext(), "EXECUTED", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Created", Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -67,10 +67,4 @@ public class CreateActivity extends AppCompatActivity {
 
     }
 
-    public Uri getImage(String imageName){
-        String CompletPath = Environment.getExternalStorageDirectory() + "/" + imageName;
-        File file = new File(CompletPath);
-        Uri uri = Uri.fromFile(file);
-        return uri;
-    }
 }

@@ -19,6 +19,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.gujja.ajay.brucew.Adapter.RecycleViewAdapter;
 import com.gujja.ajay.brucew.Room.API_Data;
 import com.gujja.ajay.brucew.Room.DatabaseClient;
 import com.gujja.ajay.brucew.model.Repo;
@@ -28,7 +29,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,21 +79,20 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
                 Log.i("TAG", "run: " + DatabaseClient.getInstance(MainActivity.this).getAppDatabase().api_dao().getAll());
 
                 if (activeNetwork != null && DatabaseClient.getInstance(MainActivity.this).getAppDatabase().api_dao().getAll().isEmpty()) {
-                    fetchfromServer();
+                    FetchFromServer();
                 } else {
-                    fetchfromRoom();
+                    FetchFromRoom();
                 }
             }
         });
         thread.start();
     }
 
-    private void fetchfromRoom() {
-        Log.i("ajajaja", "fetchfromRoom: started");
+    private void FetchFromRoom() {
+        Log.i("TAG", "FetchFromRoom : started");
         Thread thread = new Thread(() -> {
             List<API_Data> api_dataList = DatabaseClient.getInstance(MainActivity.this).getAppDatabase().api_dao().getAll();
             arrayList.clear();
-            Log.i("nhush", "fetchfromRoom: " + api_dataList);
 
             for (int i = 0; i < api_dataList.size(); i++) {
                 API_Data val = api_dataList.get(i);
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
         thread.start();
     }
 
-    private void fetchfromServer() {
+    private void FetchFromServer() {
         progressBar.setVisibility(View.VISIBLE);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(URL, response -> {
             if (response == null) {
@@ -113,13 +112,11 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
                 Toast.makeText(getApplicationContext(), "Couldn't fetch the menu! Pleas try again.", Toast.LENGTH_LONG).show();
                 return;
             }
-
             repoList = new Gson().fromJson(response.toString(), new TypeToken<List<Repo>>() {
             }.getType());
             Log.i("TAG", "onResponse: " + response.toString());
             arrayList.clear();
             arrayList.addAll(repoList);
-
 
             adapter.notifyDataSetChanged();
 
@@ -151,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
                     api_data.setAvatar_url(repoList.get(i).getAvatar_url());
                     Log.i("ajay", "doInBackground: " + repoList.get(i).getAvatar_url());
                     api_data.setType___(repoList.get(i).getType());
-//                     api_data.setId(repoList.get(i).getId());
 
                     DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().api_dao().insert(api_data);
                 }
@@ -167,7 +163,6 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
 
         SaveTask st = new SaveTask();
         st.execute();
-
 
     }
 

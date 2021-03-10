@@ -6,11 +6,9 @@ import androidx.room.Room;
 
 public class DatabaseClient {
     private static DatabaseClient databaseClient;
-    private Context mContext;
-    private AppDatabase appDatabase;
+    private final AppDatabase appDatabase;
 
     private DatabaseClient(Context mContext) {
-        this.mContext = mContext;
         appDatabase = Room.databaseBuilder(mContext, AppDatabase.class, "alldata")
                 .fallbackToDestructiveMigration()
                 .build();
