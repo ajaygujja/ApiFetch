@@ -17,20 +17,17 @@ public class SplashScreen extends AppCompatActivity {
         getSupportActionBar().hide();
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-        Thread th = new Thread() {
+
+        int SPLASH_TIME_OUT = 2000;
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                try {
-                    sleep(2000);
-                    Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                Intent SplashIntent = new Intent(SplashScreen.this, MainActivity.class);
+                SplashScreen.this.startActivity(SplashIntent);
+                SplashScreen.this.finish();
             }
-        };
-        th.start();
+        }, SPLASH_TIME_OUT);
+
     }
 
 
