@@ -28,6 +28,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         progressBar = findViewById(R.id.progress_bar);
         RecyclerView recyclerView = findViewById(R.id.recycle_view);
@@ -112,28 +114,6 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
                 return;
             }
 
-/*            try {
-                JSONArray jsonArray = new JSONArray(response);
-                Log.i("ajayajajja", "fetchfromServer: "+ jsonArray);
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject data = jsonArray.getJSONObject(i);
-                    Log.i("ajayajajja", "fetchfromServer: "+ data);
-                    API_Data api_data = new API_Data();
-                    api_data.setLoginName_(data.getString("login"));
-                    api_data.setAvatar_url(data.getString("avatar_url"));
-                    api_data.setType___(data.getString("type"));
-                    api_data.setId(data.getInt("id"));
-
-                    DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().api_dao().insert(api_data);
-
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }*/
-
-
             repoList = new Gson().fromJson(response.toString(), new TypeToken<List<Repo>>() {
             }.getType());
             Log.i("TAG", "onResponse: " + response.toString());
@@ -160,17 +140,6 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
 
     private void saveTask() {
 
-/*        for (int i = 0; i <= repoList.size(); i++){
-            API_Data api_data = new API_Data();
-            api_data.setLoginName_(repoList.get(i).getLogin());
-            api_data.setAvatar_url(repoList.get(i).getAvatar_url());
-            Log.i("ajay", "doInBackground: " + repoList.get(i).getAvatar_url());
-            api_data.setType___(repoList.get(i).getType());
-            api_data.setId(repoList.get(i).getId());
-
-            DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().api_dao().insert(api_data);
-
-        }*/
         class SaveTask extends AsyncTask<Void, Void, Void> {
 
             @Override
@@ -227,5 +196,12 @@ public class MainActivity extends AppCompatActivity implements RecycleViewAdapte
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+
     }
 }
