@@ -6,6 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 @Dao
 public interface API_Dao {
@@ -17,5 +18,8 @@ public interface API_Dao {
 
     @Delete
     void deleteword(API_Data api_data);
+
+    @Update
+    void update(API_Data api_data );
 
 }

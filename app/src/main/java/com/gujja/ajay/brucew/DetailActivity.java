@@ -43,20 +43,26 @@ public class DetailActivity extends AppCompatActivity {
 
         btn.setOnClickListener(view -> {
             Log.i("name of item", "onClick: " + name_ + "____" + avatar_url);
+
             Thread thread = new Thread(new Runnable() {
+
                 @Override
                 public void run() {
                     List<API_Data> api_dataList = DatabaseClient.getInstance(DetailActivity.this).getAppDatabase().api_dao().getAll();
                     Log.i("Api data", "onClick: " + api_dataList);
+
                     for (int i = 0; i < api_dataList.size(); i++) {
+
                         API_Data val = api_dataList.get(i);
                         Log.i("APi ", "run: " + val);
+
                         if (val.getLoginName_().equals(name_)) {
                             AsyncTask.execute(new Runnable() {
                                 @Override
                                 public void run() {
                                     DatabaseClient.getInstance(DetailActivity.this).getAppDatabase().api_dao().deleteword(val);
                                     Log.i("TAG", "run: launch");
+
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -64,6 +70,7 @@ public class DetailActivity extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
                                         }
                                     });
+
                                     Intent intent1 = new Intent(DetailActivity.this, MainActivity.class);
                                     intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent1);
